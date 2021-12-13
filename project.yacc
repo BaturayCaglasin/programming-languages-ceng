@@ -16,7 +16,7 @@
 %union
 {
 int number;
-char * str;
+char *str;
 }
 
 %token GRT LESS NL OP CP CB CBO CBC IF RULEOP //these are my tokens
@@ -25,11 +25,13 @@ char * str;
 %token <str> LOWERCASE  //lowercase characters are char
 %token <str> LETTER  //letter characters are char
 
+
 %type <str> terminal  // the terminals have a type
 %type <str> nterminal // the non-terminals have a type
 
-%type <str> lhss  // the terminals have a type
-%type <str> rhss // the non-terminals have a type
+%type <str> lhss  // the lhss has a type
+%type <str> rhss // the rhss has a type
+%type <str> decl // the decl has a type
 
 %%
 
@@ -42,48 +44,44 @@ decls:
 decl:
 lhss RULEOP rhss CB
 {
- cout<<"Matched a declaration."<<$1<<$3<<endl;
+	cout<<"<"<<$1<<">"<<" "<<"->"<<" "<<$3<<endl;
 }
 ;
 
-
-
 rhss:
  rhss rhs
- {
-   $$ = $1;
- }
  |
  rhs
- {
-   $$ = $1;
- }
  ;
 
  lhss:
   lhss lhs
-  {
-    $$ = $1;
-  }
   |
   lhs
-  {
-    $$ = $1;
-  }
   ;
 
 lhs:
-nterminal;
+nterminal
+;
 
 rhs:
 terminal | nterminal;
 
 terminal:LOWERCASE
+{
+  $$=$1;
+}
 ;
 
 nterminal:LESS UPPERCASE GRT
+{
+  $$=$2;
+}
 |
 LESS LETTER GRT
+{
+  $$=$2;
+}
 	;
 
 
