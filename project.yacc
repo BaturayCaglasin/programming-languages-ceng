@@ -10,6 +10,7 @@
 	void yyerror(string s);
 	bool errorFlag=false;
 	extern int linenum;
+  extern char * yytext;
 
 %}
 
@@ -19,17 +20,20 @@ int number;
 char *str;
 }
 
-%token GRT LESS NL OP CP CB CBO CBC IF RULEOP //these are my tokens
+%token GRT LESS NL OP CP CB CBO CBC IF RULEOP EQUALSYM //these are my tokens
 
 %token <str> UPPERCASE  //uppercase characters are char
 %token <str> LOWERCASE  //lowercase characters are char
 %token <str> LETTER  //letter characters are char
+%token <str> LESS  //less characters are char
+%token <str> GRT  //greater characters are char
 
 
 %type <str> terminal  // the terminals have a type
 %type <str> nterminal // the non-terminals have a type
 
 %type <str> lhss  // the lhss has a type
+%type <str> lhs  // the lhss has a type
 %type <str> rhss // the rhss has a type
 %type <str> decl // the decl has a type
 
@@ -44,7 +48,8 @@ decls:
 decl:
 lhss RULEOP rhss CB
 {
-	cout<<"<"<<$1<<">"<<" "<<"->"<<" "<<$3<<endl;
+  cout<<" "<<"->"<<" "<<$3<<endl;
+
 }
 ;
 
@@ -75,14 +80,38 @@ terminal:LOWERCASE
 
 nterminal:LESS UPPERCASE GRT
 {
-  $$=$2;
+  cout<<$1<<$2<<$3;
 }
 |
 LESS LETTER GRT
 {
-  $$=$2;
+  cout<<$1<<$2<<$3;
 }
-	;
+|
+UPPERCASE GRT
+{
+  cout<<"missing < symbol in line:"<<linenum;
+  errorFlag=true;
+}
+|
+LETTER GRT
+{
+  cout<<"missing < symbol in line:"<<linenum;
+  errorFlag=true;
+}
+|
+LESS UPPERCASE
+{
+  cout<<"missing > symbol in line:"<<linenum;
+  errorFlag=true;
+}
+|
+LESS LETTER
+{
+  cout<<"missing > symbol in line:"<<linenum;
+  errorFlag=true;
+}
+;
 
 
 %%
