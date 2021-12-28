@@ -202,9 +202,7 @@ int main(int argc, char *argv[])
    	tempv.push_back(temp);
     cout<<leftStr<<" "<<"->"<<" "<<tempv[2]<<" "<<newNonterminal<<endl;
     cout<<newNonterminal<<" "<<"->"<<" "<<"epsilon"<<endl;
-
-
-
+    cout<<newNonterminal<<" "<<"->"<<" "<<tempv[1]<<" "<<tempv[2]<<" "<<newNonterminal<<endl;
     }
 
     }
