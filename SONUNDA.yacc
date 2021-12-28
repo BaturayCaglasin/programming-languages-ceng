@@ -16,6 +16,7 @@
 	map<string,string> values;
   vector<string> leftv;
   vector<string> rightv;
+  vector<string> tempv;
 
 
 %}
@@ -37,6 +38,7 @@ char *str;
 %type <str> rhs
 %type <str> lhs
 %type <str> assignment
+
 
 %%
 
@@ -146,6 +148,7 @@ string combinedr = string($1) + " " +string($2) + " " + string($3);
 $$ = strdup(combinedr.c_str());
 rightv.push_back(combinedr);
 }
+
 ;
 
 %%
@@ -165,22 +168,45 @@ int main(int argc, char *argv[])
     yyparse();
     fclose(yyin);
 	  if(errorFlag==false)
-		cout<<"completed without an error. The output from left recursion algorithm:"<<endl;
+		cout<<"***completed without an error. The output from left recursion algorithm:***"<<endl;
 
-    //VECTOR TESTING
-
-	for (int i = 0; i < rightv.size(); i++)
+	   for (int i = 0; i < rightv.size(); i++)
 
     {
     string rightStr = rightv[i];
     string leftStr = leftv[i];
     size_t found = rightStr.find(leftStr);
-    //use the function i have send you here.
-    //Then using the output of the function complete the inside of if.
+    size_t found2 = leftStr.find(">");
 
-    if(found!=std::string::npos) //left exists in right
+
+
+    if(found!=std::string::npos)
     {
-      cout<<"Apply Left Recursion"<<endl;
+    if(found2!=std::string::npos)
+    {
+    string newNonterminal=leftStr.insert (2,"2");
+     //cout<<"Apply Left Recursion:"<<endl;
+
+     string temp = "";
+   	for(int i=0;i<rightStr.length();i++){
+
+   		if(rightStr[i]==' '){
+   			tempv.push_back(temp);
+   			temp = "";
+   		}
+   		else{
+   			temp.push_back(rightStr[i]);
+   		}
+
+   	}
+   	tempv.push_back(temp);
+    cout<<leftStr<<" "<<"->"<<" "<<tempv[2]<<" "<<newNonterminal<<endl;
+    cout<<newNonterminal<<" "<<"->"<<" "<<"epsilon"<<endl;
+
+
+
+    }
+
     }
     else
     {
